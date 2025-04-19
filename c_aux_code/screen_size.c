@@ -1,16 +1,14 @@
+
+#ifndef __c_screen_utils__
+#define __c_screen_utils__
+
 #include <stdio.h>
 
 #ifdef __linux__
 
 #include <stdlib.h>
-#include <string.h>
 #include <X11/Xlib.h>
 #define _session_type getenv("XDG_SESSION_TYPE")
-
-int hello() {
-    puts(_session_type);
-    return 0;
-}
 
 int get_width () {
     Display *display;
@@ -40,3 +38,8 @@ int get_height () {
 
 #endif /* __linux__ */
 
+int calc_value_percentage (int percentage, int value) {
+    return (int) (((double) value) * ((double) percentage / 100.0 ));
+}
+
+#endif /* __c_screen_utils__ */
