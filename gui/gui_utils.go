@@ -3,12 +3,12 @@ package gui
 import (
 	"errors"
 
-    // #cgo LDFLAGS: -lX11
+	// #cgo LDFLAGS: -lX11
 	// int get_width ();
 	// int get_height ();
-	// int calc_screen_percentage (int percentage, int screen_measure);
-    // #include "../c_aux_code/screen_size.c"
-    "C"
+	// int calc_screen_percentage (float percentage, int screen_measure);
+	// #include "../c_aux_code/screen_size.c"
+	"C"
 )
 
 func get_screen_size () error {
@@ -27,22 +27,22 @@ func get_screen_size () error {
 	return nil
 }
 
-func calc_screen_percentage (percentage int, use_height bool) int {
-	if use_height {
-		return _call_c_calc_value_percentage(percentage, screen_height)
-	}
-
+func calc_screen_percentage_width [N Number](percentage N) int {
 	return _call_c_calc_value_percentage(percentage, screen_width)
 }
 
-func calc_window_percentage(percentage int, use_height bool) int {
-	if use_height {
-		return _call_c_calc_value_percentage(percentage, window_height)
-	}
+func calc_screen_percentage_height [N Number](percentage N) int {
+	return _call_c_calc_value_percentage(percentage, screen_height)
+}
 
+func calc_window_percentage_width [N Number](percentage N) int {
 	return _call_c_calc_value_percentage(percentage, window_width)
 }
 
-func _call_c_calc_value_percentage (percentage int, value int) int {
-	return int(C.calc_value_percentage(C.int(percentage), C.int(value)))
+func calc_window_percentage_height [N Number](percentage N) int {
+	return _call_c_calc_value_percentage(percentage, window_height)
+}
+
+func _call_c_calc_value_percentage [N Number](percentage N, value int) int {
+	return int(C.calc_value_percentage(C.double(percentage), C.int(value)))
 }

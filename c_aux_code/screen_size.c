@@ -38,8 +38,8 @@ int get_height () {
 
 #endif /* __linux__ */
 
-int calc_value_percentage (int percentage, int value) {
-    return (int) (((double) value) * ((double) percentage / 100.0 ));
+int calc_value_percentage (double percentage, int value) {
+    return (int) ( ((double) value) * (percentage / 100.0 ) );
 }
 
 #endif /* __c_screen_utils__ */

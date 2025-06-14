@@ -21,12 +21,19 @@ func Run_gui () error {
 }
 
 func create_window (screen_width, screen_height int) error {
-	window_width = calc_screen_percentage(75, false)
-	window_height = calc_screen_percentage(70, true)
+	window_width = calc_screen_percentage_width(WINDOW_WIDTH_PERCENTAGE)
+	window_height = calc_screen_percentage_height(WINDOW_HEIGHT_PERCENTAGE)
 
 	win := fltk.NewWindow(
 		window_width,
 		window_height,
+	)
+
+	fmt.Println((float32) (100 - WINDOW_WIDTH_PERCENTAGE) / 2.0)
+	fmt.Println((float32) (100 - WINDOW_HEIGHT_PERCENTAGE) / 2.0)
+	win.SetPosition(
+		calc_screen_percentage_width((float32) (100 - WINDOW_WIDTH_PERCENTAGE) / 2.0),
+		calc_screen_percentage_height((float32) (100 - WINDOW_HEIGHT_PERCENTAGE) / 2.0) + WINDOW_DECORATION_HEIGTH,
 	)
 
 	win.End()
