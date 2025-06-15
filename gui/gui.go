@@ -2,6 +2,7 @@ package gui
 
 import (
 	"strconv"
+
 	"github.com/pwiecz/go-fltk"
 )
 
@@ -16,6 +17,9 @@ func Run_gui () error {
 	fltk.Run()
 	return nil
 }
+
+var testptr *fltk.Box = nil
+var grpptr *fltk.Group = nil
 
 func create_window (screen_width, screen_height int) error {
 	window_width = calc_screen_percentage_width(WINDOW_WIDTH_PERCENTAGE)
@@ -54,44 +58,42 @@ func create_menu_section () fltk.Widget {
 		0, 0, 
 		calc_window_percentage_width(MENU_WIDTH_PERCENTAGE), window_height,
 	)
-	inc := fltk.NewButton(0, 0, 0, 0, "Increment")
-	menu_wrapper.Fixed(inc, 40)
-	box := fltk.NewBox(fltk.FLAT_BOX, 0, 0, 0, 0, "0")
-	dec := fltk.NewButton(0, 0, 0, 0, "Decrement")
+	menu_wrapper.SetGap(5)
+
+	const btn_size int = 32
+
+	dec := fltk.NewButton(0, 0, btn_size, btn_size, "Show")
+	menu_wrapper.Fixed(dec, btn_size)
+	inc := fltk.NewButton(0, 0, btn_size, btn_size, "Hide")
+	menu_wrapper.Fixed(inc, btn_size)
+
 	inc.SetCallback(func() {
-		i++
-		box.SetLabel(strconv.Itoa(i))
+		(*testptr).Hide()
 	})
 	dec.SetCallback(func() {
-		i--
-		box.SetLabel(strconv.Itoa(i))
+		(*testptr).Show()
 	})
-
-	menu_wrapper.Fixed(dec, 40)
 
 	menu_wrapper.End()
 	return menu_wrapper
 }
 
 func create_main_section () fltk.Widget {
+	main_width := calc_window_percentage_width(MAIN_WIDTH_PERCENTAGE)
+	curr_main_height := window_height
+
 	main_wrapper := fltk.NewFlex(
 		calc_window_percentage_width(MENU_WIDTH_PERCENTAGE), 0, 
-		calc_window_percentage_width(MAIN_WIDTH_PERCENTAGE), window_height,
+		main_width, window_height,
 	)
-	inc := fltk.NewButton(0, 0, 0, 0, "Increment")
-	main_wrapper.Fixed(inc, 40)
-	box := fltk.NewBox(fltk.FLAT_BOX, 0, 0, 0, 0, "0")
-	dec := fltk.NewButton(0, 0, 0, 0, "Decrement")
-	inc.SetCallback(func() {
-		i++
-		box.SetLabel(strconv.Itoa(i))
-	})
-	dec.SetCallback(func() {
-		i--
-		box.SetLabel(strconv.Itoa(i))
-	})
 
-	main_wrapper.Fixed(dec, 40)
+	testptr = fltk.NewBox(fltk.DIAMOND_UP_BOX, 0, 0, main_width, curr_main_height, "TEST TESTS")
+	testptr.Hide()
+
+	grpptr = fltk.NewGroup(0, 0, main_width, window_height)
+	grpptr.Add(testptr)
+
+	main_wrapper.Fixed(grpptr, window_height)
 
 	main_wrapper.End()
 	return main_wrapper
