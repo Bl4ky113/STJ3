@@ -6,7 +6,7 @@ import (
 	// #cgo LDFLAGS: -lX11
 	// int get_width ();
 	// int get_height ();
-	// int calc_screen_percentage (float percentage, int screen_measure);
+	// int calc_screen_percentage (double percentage, int screen_measure);
 	// #include "../c_aux_code/screen_size.c"
 	"C"
 )
