@@ -18,9 +18,6 @@ func Run_gui () error {
 	return nil
 }
 
-var testptr *fltk.Box = nil
-var grpptr *fltk.Group = nil
-
 func create_window (screen_width, screen_height int) error {
 	window_width = calc_screen_percentage_width(WINDOW_WIDTH_PERCENTAGE)
 	window_height = calc_screen_percentage_height(WINDOW_HEIGHT_PERCENTAGE)
@@ -62,17 +59,18 @@ func create_menu_section () fltk.Widget {
 
 	const btn_size int = 32
 
-	dec := fltk.NewButton(0, 0, btn_size, btn_size, "Show")
-	menu_wrapper.Fixed(dec, btn_size)
-	inc := fltk.NewButton(0, 0, btn_size, btn_size, "Hide")
-	menu_wrapper.Fixed(inc, btn_size)
+	daily_btn := fltk.NewButton(0, 0, btn_size, btn_size, "Daily")
+	menu_wrapper.Fixed(daily_btn, btn_size)
 
-	inc.SetCallback(func() {
-		(*testptr).Hide()
-	})
-	dec.SetCallback(func() {
-		(*testptr).Show()
-	})
+	theme_btn := fltk.NewButton(0, 0, btn_size, btn_size, "Theme")
+	menu_wrapper.Fixed(theme_btn, btn_size)
+
+	thoughts_btn := fltk.NewButton(0, 0, btn_size, btn_size, "Thoughts")
+	menu_wrapper.Fixed(thoughts_btn, btn_size)
+
+	daily_btn.SetCallback(func () {handle_tab_show(DAILY_TAB_ID)})
+	theme_btn.SetCallback(func () {handle_tab_show(THEME_TAB_ID)})
+	thoughts_btn.SetCallback(func () {handle_tab_show(THOUGHTS_TAB_ID)})
 
 	menu_wrapper.End()
 	return menu_wrapper
@@ -80,20 +78,31 @@ func create_menu_section () fltk.Widget {
 
 func create_main_section () fltk.Widget {
 	main_width := calc_window_percentage_width(MAIN_WIDTH_PERCENTAGE)
-	curr_main_height := window_height
 
 	main_wrapper := fltk.NewFlex(
 		calc_window_percentage_width(MENU_WIDTH_PERCENTAGE), 0, 
 		main_width, window_height,
 	)
 
-	testptr = fltk.NewBox(fltk.DIAMOND_UP_BOX, 0, 0, main_width, curr_main_height, "TEST TESTS")
-	testptr.Hide()
+	grp_wrapper := fltk.NewGroup(0, 0, main_width, window_height)
 
-	grpptr = fltk.NewGroup(0, 0, main_width, window_height)
-	grpptr.Add(testptr)
+	tab_ptrs_map = make(map[int]*fltk.Box, NUM_TABS)
+	for i := 0; i < NUM_TABS; i++ {
+		curr_tab_id := (TAB_ID_PRIME << i)
+		curr_tab := fltk.NewBox(fltk.BORDER_FRAME, 0, 0, main_width, window_height)
+		
+		handle_tab_create(curr_tab_id, curr_tab)
+		curr_tab.Hide()
 
-	main_wrapper.Fixed(grpptr, window_height)
+		grp_wrapper.Add(curr_tab)
+		tab_ptrs_map[curr_tab_id] = curr_tab
+	}
+
+	handle_tab_show(active_tab_id)
+	active_tab_ptr = tab_ptrs_map[active_tab_id]
+
+	grp_wrapper.End()
+	main_wrapper.Add(grp_wrapper)
 
 	main_wrapper.End()
 	return main_wrapper

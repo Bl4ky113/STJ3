@@ -1,5 +1,12 @@
 package gui
 
+// PRIMES USED:
+// 	- TAB_ID_PRIME: 2
+
+import (
+	"github.com/pwiecz/go-fltk"
+)
+
 type Number interface {
 	~int | ~float64 | ~float32
 }
@@ -15,7 +22,22 @@ const WIDGETS_HEIGHT_PERCENTAGE int = 32
 
 const TITLE_STR string = "Self Thoughts Journal 3"
 
+const (
+	NUM_TABS = 3
+	TAB_ID_PRIME = 2
+)
+
+const (
+	DAILY_TAB_ID int = TAB_ID_PRIME << iota
+	THEME_TAB_ID
+	THOUGHTS_TAB_ID 
+)
+
 var screen_width, screen_height int
 var window_width, window_height int 
+
+var active_tab_id int = DAILY_TAB_ID
+var active_tab_ptr *fltk.Box = nil
+var tab_ptrs_map map[int]*fltk.Box = nil
 
 var i int = 0
