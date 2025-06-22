@@ -86,10 +86,10 @@ func create_main_section () fltk.Widget {
 
 	grp_wrapper := fltk.NewGroup(0, 0, main_width, window_height)
 
-	tab_ptrs_map = make(map[int]*fltk.Box, NUM_TABS)
+	tab_ptrs_map = make(map[int]*fltk.Group, NUM_TABS)
 	for i := 0; i < NUM_TABS; i++ {
 		curr_tab_id := (TAB_ID_PRIME << i)
-		curr_tab := fltk.NewBox(fltk.BORDER_FRAME, 0, 0, main_width, window_height)
+		curr_tab := fltk.NewGroup(0, 0, main_width, window_height)
 		
 		handle_tab_create(curr_tab_id, curr_tab)
 		curr_tab.Hide()

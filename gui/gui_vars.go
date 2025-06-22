@@ -37,7 +37,7 @@ var screen_width, screen_height int
 var window_width, window_height int 
 
 var active_tab_id int = DAILY_TAB_ID
-var active_tab_ptr *fltk.Box = nil
-var tab_ptrs_map map[int]*fltk.Box = nil
+var active_tab_ptr *fltk.Group = nil
+var tab_ptrs_map map[int]*fltk.Group = nil
 
 var i int = 0
