@@ -10,7 +10,7 @@ import (
 const (
 	STEP_DIAL_CLICK_LIMIT int = 10
 	STEP_DIAL_STEP_VALUE int = 90
-	STEP_DIAL_BORDER_SIZE int = 2.0
+	STEP_DIAL_BORDER_SIZE int = 2
 	STEP_DIAL_STARTING_DEGREE float64 = -45.0
 )
 
@@ -76,17 +76,10 @@ func (d *StepInputDial) CurrentStep() int {
 }
 
 func step_dial_handle_redraw (main_wid *fltk.Group, step *int, value *int, size int) {
+	var color_input_current_status fltk.Color
+
 	fmt.Println("redraw")
-	fltk.SetDrawColor(0x000000)
-	fltk.DrawPie(
-		main_wid.X() - STEP_DIAL_BORDER_SIZE,
-		main_wid.Y() - STEP_DIAL_BORDER_SIZE,
-		main_wid.W() + (2 * STEP_DIAL_BORDER_SIZE),
-		main_wid.H() + (2 * STEP_DIAL_BORDER_SIZE),
-		0.0,
-		360.0,
-	)
-	fltk.SetDrawColor(fltk.ColorFromRgb(230, 230, 230))
+	fltk.SetDrawColor(COLOR_INPUT_BACKGROUND)
 	fltk.DrawPie(
 		main_wid.X(),
 		main_wid.Y(),
@@ -95,14 +88,26 @@ func step_dial_handle_redraw (main_wid *fltk.Group, step *int, value *int, size 
 		0.0,
 		360.0,
 	)
+	
+	switch (*value) {
+		case 10:
+			color_input_current_status = COLOR_INPUT_SPECIAL_POSITIVE
+			break
+		case -10:
+			color_input_current_status = COLOR_INPUT_SPECIAL_NEGATIVE
+			break
+		default:
+			color_input_current_status = COLOR_INPUT_MAIN
+			break
+	}
 
 	if (*value > 0 || *value == (-1) * STEP_DIAL_CLICK_LIMIT) {
-		fltk.SetDrawColor(0xb0bf1a00)
+		fltk.SetDrawColor(color_input_current_status)
 		fltk.DrawPie(
-			main_wid.X(),
-			main_wid.Y(),
-			main_wid.W(),
-			main_wid.H(),
+			main_wid.X() - 1,
+			main_wid.Y() - 1,
+			main_wid.W() + 1,
+			main_wid.H() + 1,
 			(-1.0 * float64(*step)) + STEP_DIAL_STARTING_DEGREE,
 			STEP_DIAL_STARTING_DEGREE,
 		)
@@ -111,20 +116,26 @@ func step_dial_handle_redraw (main_wid *fltk.Group, step *int, value *int, size 
 	radious := float64(size) / 2.0
 	offset := float64(size) / (2.0 * math.Sqrt2)
 
-	fltk.SetDrawColor(0x000000)
-	fltk.SetLineStyle(0, STEP_DIAL_BORDER_SIZE)
+	fltk.SetDrawColor(COLOR_INPUT_BORDER)
+	fltk.SetLineStyle(fltk.SOLID, STEP_DIAL_BORDER_SIZE)
 	fltk.DrawLine(
-		int(main_wid.X()) + int(radious - offset) - 1,
-		int(main_wid.Y()) + int(radious - offset) - 1,
-		int(main_wid.X()) + int(radious + offset) + 1,
-		int(main_wid.Y()) + int(radious + offset) + 1,
+		int(main_wid.X()) + int(radious - offset),
+		int(main_wid.Y()) + int(radious - offset),
+		int(main_wid.X()) + int(radious + offset),
+		int(main_wid.Y()) + int(radious + offset),
 	)
+	fltk.SetLineStyle(fltk.SOLID, STEP_DIAL_BORDER_SIZE)
+	fltk.DrawArc(
+		main_wid.X(), main_wid.Y(),
+		main_wid.W(), main_wid.H(),
+		0.0, 360.0,
+	)
+
 	main_wid.DrawChildren()
 	return
 }
 
 func step_dial_handle_left_click (main_wid *fltk.Group, step *int, value *int) {
-	fmt.Println(*value)
 	if (*value == STEP_DIAL_CLICK_LIMIT) {
 		return
 	} else if (*value < 0) {
@@ -133,7 +144,9 @@ func step_dial_handle_left_click (main_wid *fltk.Group, step *int, value *int) {
 
 	*value++
 
-	if (*value % 2 != 0 || (*value > 4 && *value < STEP_DIAL_CLICK_LIMIT)) {
+	if (
+		*value % 2 != 0 || 
+		(*value > 4 && *value < STEP_DIAL_CLICK_LIMIT)) {
 		return
 	}
 
@@ -143,20 +156,18 @@ func step_dial_handle_left_click (main_wid *fltk.Group, step *int, value *int) {
 }
 
 func step_dial_handle_right_click (main_wid *fltk.Group, step *int, value *int) {
-	fmt.Println(*value)
 	if (*value == (-1) * STEP_DIAL_CLICK_LIMIT) {
 		return 
 	}
 
 	*value--
 
-	if (*value % 2 != 0) {
+	if (
+		*value % 2 != 0 ||
+		*value < 0 && *value > (-1) * STEP_DIAL_CLICK_LIMIT ||
+		*value > 4 && *value < (STEP_DIAL_CLICK_LIMIT - 2)) {
 		return
-	} else if (*value < 0 && *value > (-1) * STEP_DIAL_CLICK_LIMIT) {
-		return
-	} else if (*value > 4 && *value < (STEP_DIAL_CLICK_LIMIT - 1)) {
-		return
-	}
+	} 
 
 	*step = *value * STEP_DIAL_STEP_VALUE
 	main_wid.Redraw()

@@ -33,6 +33,14 @@ const (
 	THOUGHTS_TAB_ID 
 )
 
+const (
+	COLOR_INPUT_MAIN fltk.Color = 0x50B7E000
+	COLOR_INPUT_SPECIAL_POSITIVE fltk.Color = 0x2B2D4200
+	COLOR_INPUT_SPECIAL_NEGATIVE fltk.Color = 0xEF233C00
+	COLOR_INPUT_BORDER fltk.Color = 0x000000
+	COLOR_INPUT_BACKGROUND fltk.Color = 0xefefef00
+)
+
 var screen_width, screen_height int
 var window_width, window_height int 
 
