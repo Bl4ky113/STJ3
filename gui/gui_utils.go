@@ -3,11 +3,7 @@ package gui
 import (
 	"errors"
 
-	// #cgo LDFLAGS: -lX11
-	// int get_width ();
-	// int get_height ();
-	// int calc_screen_percentage (double percentage, int screen_measure);
-	// #include "../c_aux_code/screen_size.c"
+	// #include "screen_size.h"
 	"C"
 )
 
@@ -46,3 +42,4 @@ func calc_window_percentage_height [N Number](percentage N) int {
 func _call_c_calc_value_percentage [N Number](percentage N, value int) int {
 	return int(C.calc_value_percentage(C.double(percentage), C.int(value)))
 }
+

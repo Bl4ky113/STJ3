@@ -1,8 +1,5 @@
 
-#ifndef __c_screen_utils__
-#define __c_screen_utils__
-
-#include <stdio.h>
+#include "screen_size.h"
 
 #ifdef __linux__
 
@@ -39,7 +36,5 @@ int get_height () {
 #endif /* __linux__ */
 
 int calc_value_percentage (double percentage, int value) {
-    return (int) ( ((double) value) * (percentage / 100.0 ) );
+    return (int) (((double) value) * (percentage / 100.0));
 }
-
-#endif /* __c_screen_utils__ */
