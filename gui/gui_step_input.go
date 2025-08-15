@@ -20,14 +20,14 @@ type StepInputDial struct {
 	degree *int
 	value *int
 	on_animation *bool
-	currently_increasing *bool
+	currently_increasing *int
 }
 
 func NewStepInputDial (x, y, size int) *StepInputDial {
 	degree := 0
 	value := 0
 	on_animation := false
-	currently_increasing := false
+	currently_increasing := 0
 
 	main_wid := fltk.NewGroup(x, y, size, size)
 	main_wid.End()
@@ -78,7 +78,7 @@ func (d *StepInputDial) Value () int {
 	return *d.value / 2
 }
 
-func step_dial_handle_redraw (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *bool, size int) {
+func step_dial_handle_redraw (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *int, size int) {
 	fltk.SetDrawColor(COLOR_INPUT_BACKGROUND)
 	fltk.DrawPie(
 		main_wid.X(),
@@ -112,7 +112,7 @@ func step_dial_handle_redraw (main_wid *fltk.Group, degree *int, value *int, on_
 	return
 }
 
-func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *bool) {
+func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *int) {
 	var color_input_current_status fltk.Color
 	var current_value_max_degree, current_value_min_degree int
 
@@ -121,7 +121,7 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 		current_value_min_degree = 0
 		current_value_max_degree = 180
 
-		if (!(*currently_increasing)) {
+		if (*currently_increasing == -1) {
 			current_value_min_degree = 180
 			current_value_max_degree = *degree
 		}
@@ -134,7 +134,7 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 
 		color_input_current_status = COLOR_INPUT_MAIN
 
-		if (!(*currently_increasing)) {
+		if (*currently_increasing == -1) {
 			current_value_min_degree = -360
 			current_value_max_degree = 0
 			if (*degree > 0) {
@@ -145,7 +145,7 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 		}
 		break
 	case 10:
-		if (!(*on_animation)) {
+		if (*degree == 0 && !(*on_animation)) {
 			*degree = -360
 		}
 
@@ -168,7 +168,7 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 		current_value_max_degree = 0
 		color_input_current_status = COLOR_INPUT_BACKGROUND
 		
-		if (!(*currently_increasing)) { // from 2 -> 0
+		if (*currently_increasing == -1) { // from 2 -> 0
 			current_value_min_degree = 0
 			current_value_max_degree = *degree
 			color_input_current_status = COLOR_INPUT_MAIN
@@ -190,7 +190,7 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 		STEP_DIAL_STARTING_DEGREE,
 	)
 
-	if (*currently_increasing) {
+	if (*currently_increasing == 1) {
 		if (*degree < current_value_max_degree) {
 			*on_animation = true
 			*degree += STEP_DIAL_ANIMATION_STEP_VALUE
@@ -204,13 +204,13 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 
 		} else {
 			*on_animation = false
-			*currently_increasing = false
+			*currently_increasing = 0
 
 			if (*value == 10) {
 				*degree = 360 // Fix degree from double cicle animation
 			}
 		}
-	} else {
+	} else if (*currently_increasing == -1){
 		if (*degree > current_value_min_degree) {
 			*on_animation = true
 			*degree -= STEP_DIAL_ANIMATION_STEP_VALUE
@@ -224,7 +224,7 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 
 		} else {
 			*on_animation = false
-			*currently_increasing = false
+			*currently_increasing = 0
 
 			if (*value == 4) {
 				*degree = 360 // Fix degree from double cicle animation
@@ -236,7 +236,7 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 	return
 }
 
-func step_dial_handle_left_click (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *bool) {
+func step_dial_handle_left_click (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *int) {
 	if (*value == STEP_DIAL_CLICK_LIMIT || *on_animation == true) {
 		return
 	} 
@@ -259,12 +259,12 @@ func step_dial_handle_left_click (main_wid *fltk.Group, degree *int, value *int,
 
 	//*step = *value * STEP_DIAL_STEP_VALUE
 	//*degree += STEP_DIAL_ANIMATION_STEP_VALUE
-	*currently_increasing = true
+	*currently_increasing = 1
 	main_wid.Redraw()
 	return
 }
 
-func step_dial_handle_right_click (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *bool) {
+func step_dial_handle_right_click (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *int) {
 	if (*value == (-1) * STEP_DIAL_CLICK_LIMIT || *on_animation) {
 		return
 	} 
@@ -284,7 +284,7 @@ func step_dial_handle_right_click (main_wid *fltk.Group, degree *int, value *int
 
 	//*step = *value * STEP_DIAL_STEP_VALUE
 	//*degree -= STEP_DIAL_ANIMATION_STEP_VALUE
-	*currently_increasing = false
+	*currently_increasing = -1
 	main_wid.Redraw()
 	return
 }
