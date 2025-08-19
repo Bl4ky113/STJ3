@@ -5,12 +5,14 @@ import (
 	"strconv"
 
 	"github.com/pwiecz/go-fltk"
+
+	gui_daily "selfjournal/gui/daily"
 )
 
 func handle_widget_create (widget_id int, parent *fltk.Group) {
 	switch widget_id {
 	case DAILY_SUBMENU_ID:
-		parent.Add(generate_daily_submenu(parent))
+		parent.Add(gui_daily.Generate_daily_submenu(parent))
 	default:
 		parent.Add(fltk.NewBox(fltk.BORDER_BOX, parent.X(), parent.Y(), 150, 150, strconv.Itoa(widget_id)))
 	}

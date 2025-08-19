@@ -1,9 +1,11 @@
-package gui
+package gui_daily
 
 import (
 	"fmt"
 
 	"github.com/pwiecz/go-fltk"
+
+	stepdial "selfjournal/gui/stepdial_input"
 )
 
 const (
@@ -15,7 +17,7 @@ const (
 	DAILY_TAB_DIAL_INPUT_SIZE = 48
 )
 
-func generate_daily_tab (parent *fltk.Group) *fltk.Scroll {
+func Generate_daily_tab (parent *fltk.Group) *fltk.Scroll {
 	fmt.Println("GENERATING DAILY TAB")
 	wrapper := fltk.NewScroll(
 		parent.X(),
@@ -38,7 +40,7 @@ func generate_daily_tab (parent *fltk.Group) *fltk.Scroll {
 		DAILY_TAB_GRID_GAP,
 	)
 
-	add_days_labels_to_grid(grid)
+	add_days_labels(grid)
 
 	for i := 1; i < 32 + 1; i++ {
 		grid_label := fltk.NewBox(
@@ -48,22 +50,22 @@ func generate_daily_tab (parent *fltk.Group) *fltk.Scroll {
 			"TEST Consectetur dolores fuga obcaecati quibusdam ducimus debitis id Cupiditate veritatis officiis nostrum veniam reprehenderit distinctio! Commodi perspiciatis saepe illo assumenda saepe ut. Aliquid id aliquam laboriosam corporis consectetur. Recusandae perspiciatis.",
 		)
 
-		grid_dial_input_1 := NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
-		grid_dial_input_2 := NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
-		grid_dial_input_3 := NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
-		grid_dial_input_4 := NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
-		grid_dial_input_5 := NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
-		grid_dial_input_6 := NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
-		grid_dial_input_7 := NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
+		grid_dial_input_1 := stepdial.NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
+		grid_dial_input_2 := stepdial.NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
+		grid_dial_input_3 := stepdial.NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
+		grid_dial_input_4 := stepdial.NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
+		grid_dial_input_5 := stepdial.NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
+		grid_dial_input_6 := stepdial.NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
+		grid_dial_input_7 := stepdial.NewStepInputDial(0,0,DAILY_TAB_DIAL_INPUT_SIZE)
 		
 		grid.SetWidget(grid_label, i, 0, fltk.GridHorizontal)
-		grid.SetWidget(grid_dial_input_1.main_wid, i, 1, fltk.GridCenter)
-		grid.SetWidget(grid_dial_input_2.main_wid, i, 2, fltk.GridCenter)
-		grid.SetWidget(grid_dial_input_3.main_wid, i, 3, fltk.GridCenter)
-		grid.SetWidget(grid_dial_input_4.main_wid, i, 4, fltk.GridCenter)
-		grid.SetWidget(grid_dial_input_5.main_wid, i, 5, fltk.GridCenter)
-		grid.SetWidget(grid_dial_input_6.main_wid, i, 6, fltk.GridCenter)
-		grid.SetWidget(grid_dial_input_7.main_wid, i, 7, fltk.GridCenter)
+		grid.SetWidget(grid_dial_input_1.Widget, i, 1, fltk.GridCenter)
+		grid.SetWidget(grid_dial_input_2.Widget, i, 2, fltk.GridCenter)
+		grid.SetWidget(grid_dial_input_3.Widget, i, 3, fltk.GridCenter)
+		grid.SetWidget(grid_dial_input_4.Widget, i, 4, fltk.GridCenter)
+		grid.SetWidget(grid_dial_input_5.Widget, i, 5, fltk.GridCenter)
+		grid.SetWidget(grid_dial_input_6.Widget, i, 6, fltk.GridCenter)
+		grid.SetWidget(grid_dial_input_7.Widget, i, 7, fltk.GridCenter)
 	}
 
 	wrapper.Add(grid)
@@ -73,7 +75,7 @@ func generate_daily_tab (parent *fltk.Group) *fltk.Scroll {
 	return wrapper
 }
 
-func add_days_labels_to_grid (grid *fltk.Grid) {
+func add_days_labels (grid *fltk.Grid) {
 	const (
 		DAILY_TAB_DAY_WIDTH = DAILY_TAB_DIAL_INPUT_SIZE
 		DAILY_TAB_DAY_HEIGHT = 32

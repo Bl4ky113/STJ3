@@ -1,4 +1,4 @@
-package gui
+package gui_stepdial_input
 
 import (
 	"math"
@@ -7,6 +7,14 @@ import (
 )
 
 const (
+	COLOR_INPUT_MAIN fltk.Color = 0x50B7E000
+	COLOR_INPUT_DARK fltk.Color = 0x4795B900
+	COLOR_INPUT_DARKER fltk.Color = 0x3E729100
+	COLOR_INPUT_SPECIAL_POSITIVE fltk.Color = 0x2B2D4200
+	COLOR_INPUT_SPECIAL_NEGATIVE fltk.Color = 0xEF233C00
+	COLOR_INPUT_BORDER fltk.Color = 0x000000
+	COLOR_INPUT_BACKGROUND fltk.Color = 0xefefef00
+
 	STEP_DIAL_CLICK_LIMIT int = 10
 	STEP_DIAL_STEP_VALUE int = 180
 	STEP_DIAL_ANIMATION_STEP_VALUE int = 6
@@ -16,7 +24,7 @@ const (
 )
 
 type StepInputDial struct {
-	main_wid  *fltk.Group
+	Widget  *fltk.Group
 	degree *int
 	value *int
 	on_animation *bool
@@ -62,6 +70,10 @@ func NewStepInputDial (x, y, size int) *StepInputDial {
 	}
 }
 
+func (d *StepInputDial) Value () int {
+	return *d.value / 2
+}
+
 func (d *StepInputDial) SetValue(val int) {
 	*d.value = val
 
@@ -71,11 +83,7 @@ func (d *StepInputDial) SetValue(val int) {
 		*d.value = (-1) * STEP_DIAL_CLICK_LIMIT
 	}
 
-	d.main_wid.Redraw()
-}
-
-func (d *StepInputDial) Value () int {
-	return *d.value / 2
+	d.Widget.Redraw()
 }
 
 func step_dial_handle_redraw (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *int, size int) {

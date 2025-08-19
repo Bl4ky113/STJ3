@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/pwiecz/go-fltk"
+
+	gui_daily "selfjournal/gui/daily"
 )
 
 func handle_tab_create (tab_id int, parent *fltk.Group) {
@@ -11,7 +13,7 @@ func handle_tab_create (tab_id int, parent *fltk.Group) {
 	case DAILY_TAB_ID:
 		tab_widgets_ids[tab_id] = [3]int{DAILY_SUBMENU_ID, THEME_WIDGET_ID, THOUGHTS_WIDGET_ID}
 
-		parent.Add(generate_daily_tab(parent))
+		parent.Add(gui_daily.Generate_daily_tab(parent))
 		break
 	case THEME_TAB_ID:
 		tab_widgets_ids[tab_id] = [3]int{THEME_SUBMENU_ID, DAILY_WIDGET_ID, THOUGHTS_WIDGET_ID}

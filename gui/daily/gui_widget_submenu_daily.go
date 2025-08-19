@@ -1,4 +1,4 @@
-package gui
+package gui_daily
 
 import (
 	"fmt"
@@ -9,13 +9,9 @@ import (
 const (
 	DAILY_SUBMENU_GRID_MARGIN = 12
 	DAILY_SUBMENU_GRID_GAP = 8
-	DAILY_SUBMENU_WEEK_BTN_WIDTH = 64
-	DAILY_SUBMENU_WEEK_BTN_HEIGHT = 32
-	DAILY_SUBMENU_END_BTN_WIDTH = 128
-	DAILY_SUBMENU_END_BTN_HEIGHT = 32
 )	
 
-func generate_daily_submenu (parent *fltk.Group) *fltk.Group {
+func Generate_daily_submenu (parent *fltk.Group) *fltk.Group {
 	fmt.Println("GENERATING DAILY SUBMENU")
 	wrapper := fltk.NewGroup(
 		parent.X(), parent.Y(),
@@ -39,6 +35,11 @@ func generate_daily_submenu (parent *fltk.Group) *fltk.Group {
 }
 
 func daily_submenu_add_week_btns (parent *fltk.Grid) {
+	const (
+		DAILY_SUBMENU_WEEK_BTN_WIDTH = 64
+		DAILY_SUBMENU_WEEK_BTN_HEIGHT = 32
+	)
+
 	btns_flex := fltk.NewFlex(
 		parent.X(), parent.Y(),
 		parent.W() - (DAILY_SUBMENU_GRID_MARGIN * 2), DAILY_SUBMENU_WEEK_BTN_HEIGHT,
@@ -76,6 +77,11 @@ func daily_submenu_add_progress (parent *fltk.Grid) {
 }
 
 func daily_submenu_add_daily_btns (parent *fltk.Grid) {
+	const (
+		DAILY_SUBMENU_END_BTN_WIDTH = 128
+		DAILY_SUBMENU_END_BTN_HEIGHT = 32
+	)
+
 	end_day_btn := fltk.NewButton(
 		parent.X(), parent.Y(),
 		DAILY_SUBMENU_END_BTN_WIDTH, DAILY_SUBMENU_END_BTN_HEIGHT,
