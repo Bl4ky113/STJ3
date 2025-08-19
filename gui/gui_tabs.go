@@ -11,8 +11,7 @@ func handle_tab_create (tab_id int, parent *fltk.Group) {
 	case DAILY_TAB_ID:
 		tab_widgets_ids[tab_id] = [3]int{DAILY_SUBMENU_ID, THEME_WIDGET_ID, THOUGHTS_WIDGET_ID}
 
-		daily_tab_group := generate_daily_tab(parent)
-		parent.Add(daily_tab_group)
+		parent.Add(generate_daily_tab(parent))
 		break
 	case THEME_TAB_ID:
 		tab_widgets_ids[tab_id] = [3]int{THEME_SUBMENU_ID, DAILY_WIDGET_ID, THOUGHTS_WIDGET_ID}
@@ -60,6 +59,6 @@ func handle_tab_hide (tab_id int) {
 	}
 	
 	tab_ptr.Hide()
-	fmt.Printf("HIDDING %d\n", tab_id)
+	fmt.Printf("HIDDING TAB %d\n", tab_id)
 	return
 }

@@ -13,7 +13,6 @@ const (
 	DAILY_TAB_GRID_GAP = 12
 	DAILY_TAB_LABELS_WIDTH = 312
 	DAILY_TAB_DIAL_INPUT_SIZE = 48
-	DAILY_TAB_WEEK_BTNS_SIZE = 64
 )
 
 func generate_daily_tab (parent *fltk.Group) *fltk.Scroll {
