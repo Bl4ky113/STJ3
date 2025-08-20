@@ -6,12 +6,15 @@ import (
 
 	"github.com/pwiecz/go-fltk"
 
+	g "selfjournal/globals"
+
 	gui_daily "selfjournal/gui/daily"
+	
 )
 
 func handle_widget_create (widget_id int, parent *fltk.Group) {
 	switch widget_id {
-	case DAILY_SUBMENU_ID:
+	case g.DAILY_SUBMENU_ID:
 		parent.Add(gui_daily.Generate_daily_submenu(parent))
 	default:
 		parent.Add(fltk.NewBox(fltk.BORDER_BOX, parent.X(), parent.Y(), 150, 150, strconv.Itoa(widget_id)))
@@ -59,7 +62,7 @@ func handle_widgets_hide (tab_id int) {
 	widgets_grid_ptr.ClearLayout() // Thanks Me
 	widgets_grid_ptr.SetLayout(3, 1, 0, 0)
 
-	for widget_id := range tab_widgets_ids[tab_id] {
+	for _, widget_id := range tab_widgets_ids[tab_id] {
 		widget_ptr, widget_exists := widgets_ptr_map[widget_id]
 
 		if !widget_exists {

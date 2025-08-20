@@ -5,26 +5,28 @@ import (
 
 	"github.com/pwiecz/go-fltk"
 
+	g "selfjournal/globals"
+
 	gui_daily "selfjournal/gui/daily"
 )
 
 func handle_tab_create (tab_id int, parent *fltk.Group) {
 	switch tab_id {
-	case DAILY_TAB_ID:
-		tab_widgets_ids[tab_id] = [3]int{DAILY_SUBMENU_ID, THEME_WIDGET_ID, THOUGHTS_WIDGET_ID}
+	case g.DAILY_TAB_ID:
+		tab_widgets_ids[tab_id] = [3]int{g.DAILY_SUBMENU_ID, g.THEME_WIDGET_ID, g.THOUGHTS_WIDGET_ID}
 
 		parent.Add(gui_daily.Generate_daily_tab(parent))
 		break
-	case THEME_TAB_ID:
-		tab_widgets_ids[tab_id] = [3]int{THEME_SUBMENU_ID, DAILY_WIDGET_ID, THOUGHTS_WIDGET_ID}
+	case g.THEME_TAB_ID:
+		tab_widgets_ids[tab_id] = [3]int{g.THEME_SUBMENU_ID, g.DAILY_WIDGET_ID, g.THOUGHTS_WIDGET_ID}
 
 		value_box := fltk.NewBox(fltk.NO_BOX, 0, 0, 40, 40, "321")
 		value_box.SetLabelSize(26)
 		parent.Add(value_box)
 		parent.SetColor(fltk.RED)
 		break
-	case THOUGHTS_TAB_ID:
-		tab_widgets_ids[tab_id] = [3]int{THOUGHTS_SUBMENU_ID, THEME_WIDGET_ID, DAILY_WIDGET_ID}
+	case g.THOUGHTS_TAB_ID:
+		tab_widgets_ids[tab_id] = [3]int{g.THOUGHTS_SUBMENU_ID, g.THEME_WIDGET_ID, g.DAILY_WIDGET_ID}
 
 		parent.SetColor(fltk.GREEN)
 		break

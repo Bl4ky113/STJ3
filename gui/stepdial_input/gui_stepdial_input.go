@@ -4,17 +4,11 @@ import (
 	"math"
 
 	"github.com/pwiecz/go-fltk"
+
+	g "selfjournal/globals"
 )
 
 const (
-	COLOR_INPUT_MAIN fltk.Color = 0x50B7E000
-	COLOR_INPUT_DARK fltk.Color = 0x4795B900
-	COLOR_INPUT_DARKER fltk.Color = 0x3E729100
-	COLOR_INPUT_SPECIAL_POSITIVE fltk.Color = 0x2B2D4200
-	COLOR_INPUT_SPECIAL_NEGATIVE fltk.Color = 0xEF233C00
-	COLOR_INPUT_BORDER fltk.Color = 0x000000
-	COLOR_INPUT_BACKGROUND fltk.Color = 0xefefef00
-
 	STEP_DIAL_CLICK_LIMIT int = 10
 	STEP_DIAL_STEP_VALUE int = 180
 	STEP_DIAL_ANIMATION_STEP_VALUE int = 6
@@ -87,7 +81,7 @@ func (d *StepInputDial) SetValue(val int) {
 }
 
 func step_dial_handle_redraw (main_wid *fltk.Group, degree *int, value *int, on_animation *bool, currently_increasing *int, size int) {
-	fltk.SetDrawColor(COLOR_INPUT_BACKGROUND)
+	fltk.SetDrawColor(g.COLOR_INPUT_BACKGROUND)
 	fltk.DrawPie(
 		main_wid.X(),
 		main_wid.Y(),
@@ -102,7 +96,7 @@ func step_dial_handle_redraw (main_wid *fltk.Group, degree *int, value *int, on_
 	radious := float64(size) / 2.0
 	offset := float64(size) / (2.0 * math.Sqrt2)
 
-	fltk.SetDrawColor(COLOR_INPUT_BORDER)
+	fltk.SetDrawColor(g.COLOR_INPUT_BORDER)
 	fltk.SetLineStyle(fltk.SOLID, STEP_DIAL_BORDER_SIZE)
 	fltk.DrawLine(
 		int(main_wid.X()) + int(radious - offset),
@@ -134,21 +128,21 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 			current_value_max_degree = *degree
 		}
 
-		color_input_current_status = COLOR_INPUT_MAIN
+		color_input_current_status = g.COLOR_INPUT_MAIN
 		break
 	case 4:
 		current_value_min_degree = 180
 		current_value_max_degree = 360
 
-		color_input_current_status = COLOR_INPUT_MAIN
+		color_input_current_status = g.COLOR_INPUT_MAIN
 
 		if (*currently_increasing == -1) {
 			current_value_min_degree = -360
 			current_value_max_degree = 0
 			if (*degree > 0) {
-				color_input_current_status = COLOR_INPUT_SPECIAL_POSITIVE
+				color_input_current_status = g.COLOR_INPUT_SPECIAL_POSITIVE
 			} else {
-				color_input_current_status = COLOR_INPUT_MAIN
+				color_input_current_status = g.COLOR_INPUT_MAIN
 			}
 		}
 		break
@@ -161,29 +155,29 @@ func step_dial_draw_current_status_pie (main_wid *fltk.Group, degree *int, value
 		current_value_max_degree = 360
 
 		if (*degree > 0) {
-			color_input_current_status = COLOR_INPUT_SPECIAL_POSITIVE
+			color_input_current_status = g.COLOR_INPUT_SPECIAL_POSITIVE
 		} else {
-			color_input_current_status = COLOR_INPUT_MAIN
+			color_input_current_status = g.COLOR_INPUT_MAIN
 		}
 		break
 	case -10:
 		current_value_min_degree = -360
 		current_value_max_degree = 0
-		color_input_current_status = COLOR_INPUT_SPECIAL_NEGATIVE
+		color_input_current_status = g.COLOR_INPUT_SPECIAL_NEGATIVE
 		break
 	default:
 		current_value_min_degree = 0
 		current_value_max_degree = 0
-		color_input_current_status = COLOR_INPUT_BACKGROUND
+		color_input_current_status = g.COLOR_INPUT_BACKGROUND
 		
 		if (*currently_increasing == -1) { // from 2 -> 0
 			current_value_min_degree = 0
 			current_value_max_degree = *degree
-			color_input_current_status = COLOR_INPUT_MAIN
+			color_input_current_status = g.COLOR_INPUT_MAIN
 		} else { // from -10 -> 0
 			current_value_min_degree = *degree
 			current_value_max_degree = 0
-			color_input_current_status = COLOR_INPUT_SPECIAL_NEGATIVE
+			color_input_current_status = g.COLOR_INPUT_SPECIAL_NEGATIVE
 		}
 		break
 	}

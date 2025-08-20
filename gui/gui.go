@@ -2,6 +2,8 @@ package gui
 
 import (
 	"github.com/pwiecz/go-fltk"
+
+	g "selfjournal/globals"
 )
 
 func Run_gui () error {
@@ -41,8 +43,8 @@ func create_window (screen_width, screen_height int) error {
 	window_flex_wrapper.Fixed(main_wrapper, calc_window_percentage_width(MAIN_WIDTH_PERCENTAGE))
 	window_flex_wrapper.Fixed(widgets_wrapper, calc_window_percentage_width(WIDGETS_WIDTH_PERCENTAGE))
 
-	handle_tab_show(DAILY_TAB_ID)
-	handle_widgets_show(DAILY_TAB_ID)
+	handle_tab_show(g.DAILY_TAB_ID)
+	handle_widgets_show(g.DAILY_TAB_ID)
 
 	win.End()
 	win.Add(window_flex_wrapper)
@@ -72,16 +74,16 @@ func create_menu_section () fltk.Widget {
 	menu_wrapper.Fixed(thoughts_btn, MENU_BTN_SIZE)
 
 	daily_btn.SetCallback(func () {
-		handle_tab_show(DAILY_TAB_ID)
-		handle_widgets_show(DAILY_TAB_ID)
+		handle_tab_show(g.DAILY_TAB_ID)
+		handle_widgets_show(g.DAILY_TAB_ID)
 	})
 	theme_btn.SetCallback(func () {
-		handle_tab_show(THEME_TAB_ID)
-		handle_widgets_show(THEME_TAB_ID)
+		handle_tab_show(g.THEME_TAB_ID)
+		handle_widgets_show(g.THEME_TAB_ID)
 	})
 	thoughts_btn.SetCallback(func () {
-		handle_tab_show(THOUGHTS_TAB_ID)
-		handle_widgets_show(THOUGHTS_TAB_ID)
+		handle_tab_show(g.THOUGHTS_TAB_ID)
+		handle_widgets_show(g.THOUGHTS_TAB_ID)
 	})
 
 	menu_wrapper.End()
@@ -98,10 +100,10 @@ func create_main_section () fltk.Widget {
 
 	grp_wrapper := fltk.NewGroup(0, 0, main_width, window_height)
 
-	tab_ptrs_map = make(map[int]*fltk.Group, NUM_TABS)
-	tab_widgets_ids = make(map[int][3]int, NUM_TABS)
-	for i := 0; i < NUM_TABS; i++ {
-		curr_tab_id := (TAB_ID_PRIME << i)
+	tab_ptrs_map = make(map[int]*fltk.Group, g.NUM_TABS)
+	tab_widgets_ids = make(map[int][3]int, g.NUM_TABS)
+	for i := 0; i < g.NUM_TABS; i++ {
+		curr_tab_id := (g.TAB_ID_PRIME << i)
 		curr_tab := fltk.NewGroup(0, 0, main_width, window_height)
 		
 		handle_tab_create(curr_tab_id, curr_tab)
@@ -130,9 +132,9 @@ func create_widget_section () fltk.Widget {
 	)
 	widgets_wrapper.SetLayout(3, 1, 0, 0)
 
-	widgets_ptr_map = make(map[int]*fltk.Group, NUM_WIDGETS)
-	for i := 0; i < NUM_WIDGETS; i++ {
-		curr_widget_id := (WIDGET_ID_PRIME << i)
+	widgets_ptr_map = make(map[int]*fltk.Group, g.NUM_WIDGETS)
+	for i := 0; i < g.NUM_WIDGETS; i++ {
+		curr_widget_id := (g.WIDGET_ID_PRIME << i)
 		curr_widget := fltk.NewGroup(
 			widgets_wrapper.X(), widgets_wrapper.Y(), 
 			widgets_width, widgets_height,

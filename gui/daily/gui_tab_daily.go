@@ -40,8 +40,38 @@ func Generate_daily_tab (parent *fltk.Group) *fltk.Scroll {
 		DAILY_TAB_GRID_GAP,
 	)
 
-	add_days_labels(grid)
+	tab_add_days_labels(grid)
+	tab_add_stepdial_inputs(grid)
 
+	wrapper.Add(grid)
+	grid.End()
+	wrapper.End()
+
+	return wrapper
+}
+
+func tab_add_days_labels (grid *fltk.Grid) {
+	const (
+		DAILY_TAB_DAY_WIDTH = DAILY_TAB_DIAL_INPUT_SIZE
+		DAILY_TAB_DAY_HEIGHT = 32
+	)
+
+	var days_labels [7]string = [7]string{"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"}
+
+	for i := 1; i <= len(days_labels); i++ {
+		day_label := fltk.NewBox(
+			fltk.BORDER_BOX, 0, 0, 
+			DAILY_TAB_DAY_WIDTH, DAILY_TAB_DAY_HEIGHT,
+			days_labels[i - 1],
+		)
+		grid.SetWidget(day_label, 0, i, fltk.GridFill)
+	}
+
+	grid.SetWidget(fltk.NewBox(fltk.FLAT_BOX, 0, 0, 0, 0, ""), 0, 8, fltk.GridFill)
+	return
+}
+
+func tab_add_stepdial_inputs (grid *fltk.Grid) {
 	for i := 1; i < 32 + 1; i++ {
 		grid_label := fltk.NewBox(
 			fltk.BORDER_BOX, 
@@ -67,31 +97,4 @@ func Generate_daily_tab (parent *fltk.Group) *fltk.Scroll {
 		grid.SetWidget(grid_dial_input_6.Widget, i, 6, fltk.GridCenter)
 		grid.SetWidget(grid_dial_input_7.Widget, i, 7, fltk.GridCenter)
 	}
-
-	wrapper.Add(grid)
-	grid.End()
-	wrapper.End()
-
-	return wrapper
-}
-
-func add_days_labels (grid *fltk.Grid) {
-	const (
-		DAILY_TAB_DAY_WIDTH = DAILY_TAB_DIAL_INPUT_SIZE
-		DAILY_TAB_DAY_HEIGHT = 32
-	)
-
-	var days_labels [7]string = [7]string{"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"}
-
-	for i := 1; i <= len(days_labels); i++ {
-		day_label := fltk.NewBox(
-			fltk.BORDER_BOX, 0, 0, 
-			DAILY_TAB_DAY_WIDTH, DAILY_TAB_DAY_HEIGHT,
-			days_labels[i - 1],
-		)
-		grid.SetWidget(day_label, 0, i, fltk.GridFill)
-	}
-
-	grid.SetWidget(fltk.NewBox(fltk.FLAT_BOX, 0, 0, 0, 0, ""), 0, 8, fltk.GridFill)
-	return
 }
