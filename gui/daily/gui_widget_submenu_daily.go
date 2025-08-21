@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/pwiecz/go-fltk"
+
+	g "selfjournal/globals"
 )
 
 const (
@@ -78,18 +80,12 @@ func submenu_add_progress (parent *fltk.Grid) {
 		PROGRESS_GRID_ROWS = 2
 		PROGRESS_GRID_COLUMNS = 6
 		PROGRESS_GRID_MARGIN = 0
-		PROGRESS_GRID_GAP = 0
-		
-		DEFAULT_SVG_PATH = "gui/src/"
-		TASK_NICE_SVG_PATH = DEFAULT_SVG_PATH + "mug.svg"
-		TASK_SHOULD_SVG_PATH = DEFAULT_SVG_PATH + "gears.svg"
-		TASK_LIKE_SVG_PATH = DEFAULT_SVG_PATH + "seedling.svg"
-		TASK_HAVE_SVG_PATH = DEFAULT_SVG_PATH + "briefcase.svg"
-		TASK_SPECIAL_GOOD_SVG_PATH = DEFAULT_SVG_PATH + "medal.svg"
-		TASK_SPECIAL_BAD_SVG_PATH = DEFAULT_SVG_PATH + "bus.svg"
+		PROGRESS_GRID_GAP = 0	
+		PROGRESS_LABEL_HEIGHT = 16
 	)
 
 	var icon_size int
+	var icon_id_order [g.NUM_TASKS]int = [g.NUM_TASKS]int{g.HAVE_TASK_ID, g.NICE_TASK_ID, g.SHOULD_TASK_ID, g.LIKE_TASK_ID, g.SPECIAL_GOOD_TASK_ID, g.SPECIAL_BAD_TASK_ID}
 
 	progress_grid := fltk.NewGrid(
 		parent.X(), parent.Y(),
@@ -103,14 +99,48 @@ func submenu_add_progress (parent *fltk.Grid) {
 	)
 
 	icon_size = progress_grid.W() / PROGRESS_GRID_COLUMNS
-	fmt.Printf("icon size %d, %d = %d\n", progress_grid.W(), PROGRESS_GRID_COLUMNS, icon_size)
 
-	bar := fltk.NewBox(fltk.BORDER_FRAME, 0, 0, icon_size, icon_size, "")
-	foo, _ := fltk.NewSvgImageLoad(TASK_LIKE_SVG_PATH)
-	foo.Scale(icon_size, icon_size, true, false)
-	bar.SetImage(foo)
+	for i, icon_id := range icon_id_order {
+		var icon_svg_path string
 
-	progress_grid.SetWidget(bar, 0, 0, fltk.GridCenter)
+		switch icon_id {
+		case g.HAVE_TASK_ID:
+			icon_svg_path = g.TASK_HAVE_SVG_PATH
+		case g.NICE_TASK_ID:
+			icon_svg_path = g.TASK_NICE_SVG_PATH
+		case g.SHOULD_TASK_ID:
+			icon_svg_path = g.TASK_SHOULD_SVG_PATH
+		case g.LIKE_TASK_ID:
+			icon_svg_path = g.TASK_LIKE_SVG_PATH
+		case g.SPECIAL_GOOD_TASK_ID:
+			icon_svg_path = g.TASK_SPECIAL_GOOD_SVG_PATH
+		case g.SPECIAL_BAD_TASK_ID:
+			icon_svg_path = g.TASK_SPECIAL_BAD_SVG_PATH
+		}
+
+		icon_box := fltk.NewBox(
+			fltk.FLAT_BOX, progress_grid.X(), progress_grid.Y(),
+			icon_size, icon_size, "",
+		)
+
+		icon_svg, err := fltk.NewSvgImageLoad(icon_svg_path)
+		if err != nil {
+			// ERROR LOADING SVG FROM icon_svg_path
+			continue
+		}
+
+		icon_svg.Scale(icon_size, icon_size, true, true)
+		icon_box.SetImage(icon_svg)
+
+		progress_box := fltk.NewBox(
+			fltk.FLAT_BOX, progress_grid.X(), progress_grid.Y(),
+			icon_size, PROGRESS_LABEL_HEIGHT, 
+			"123",
+		)
+
+		progress_grid.SetWidget(icon_box, 0, i, fltk.GridBottom)
+		progress_grid.SetWidget(progress_box, 1, i, fltk.GridTop)
+	}
 
 	progress_grid.End()
 	parent.SetWidget(progress_grid, 1, 0, fltk.GridFill)
